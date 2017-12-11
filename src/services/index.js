@@ -1,3 +1,3 @@
 import auth from './auth'
-
-export { auth }
+import permissionCheck from './permission_check'
+export { auth, permissionCheck }
