@@ -79,7 +79,7 @@
         "tabWidth": 4
     },
     "lint-staged": {
-        "*.js": ["eslint --fix", "prettier --write", "git add"]
+        "*.js": ["prettier --write", "git add"]
     },
     "nodemonConfig": {
         "execMap": {
