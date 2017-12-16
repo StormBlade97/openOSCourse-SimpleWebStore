@@ -19,13 +19,14 @@ router
         }
         const item = ctx.request.body
         try {
-            await Item.create(item)
+            const newItem = await Item.create(item)
             ctx.status = 201
+            ctx.body = newItem
         } catch (error) {
             logger.error(error)
         }
     })
-    .patch('/items/:id', auth, permissionCheck, async ctx => {
+    .put('/items/:id', auth, permissionCheck, async ctx => {
         if (
             ctx.state.user.privilege !== 'admin' &&
             Object.keys(ctx.request.body).filter(key =>
@@ -37,8 +38,8 @@ router
             return
         }
         const patchData = _.pick(ctx.request.body, [
-            'name',
-            'image',
+            'title',
+            'poster',
             'stock',
             'price'
         ])

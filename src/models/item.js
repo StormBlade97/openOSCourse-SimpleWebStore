@@ -5,7 +5,7 @@ const schema = new Schema({
     price: { type: Number, required: true },
     poster: String,
     backdrop: String,
-    stock: { Number, default: 0 }
+    stock: { type: Number, default: 0 }
 })
 
 schema.set('toJSON', {

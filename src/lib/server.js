@@ -41,6 +41,7 @@ export async function createServer() {
 
         // Load routes (API "controllers")
         .use(Controllers.items.routes())
+        .use(Controllers.login.routes())
         // Register authentication
         .use(auth)
         .use(Controllers.users.routes())
