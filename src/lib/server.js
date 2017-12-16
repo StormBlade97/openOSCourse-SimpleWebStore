@@ -23,55 +23,56 @@ Mongoose.Promise = global.Promise
  * @return {Promise<http.Server>} The configured app.
  */
 export async function createServer() {
-  logger.debug('Creating server...')
-  const app = new Koa()
+    logger.debug('Creating server...')
+    const app = new Koa()
 
-  // set up the server
-  app
-    // Top middleware is the error handler.
-    .use(errorHandler)
-    // Compress all responses.
-    .use(compress())
-    // Adds ctx.ok(), ctx.notFound(), etc..
-    .use(respond())
-    // Handles CORS.
-    .use(cors())
-    // Parses request bodies.
-    .use(bodyParser())
-    // Register authentication
-    .use(auth)
-    // Load routes (API "controllers")
-    .use(Controllers.items.routes())
-    .use(Controllers.users.routes())
-    // Default handler when nothing stopped the chain.
-    .use(notFoundHandler)
+    // set up the server
+    app
+        // Top middleware is the error handler.
+        .use(errorHandler)
+        // Compress all responses.
+        .use(compress())
+        // Adds ctx.ok(), ctx.notFound(), etc..
+        .use(respond())
+        // Handles CORS.
+        .use(cors())
+        // Parses request bodies.
+        .use(bodyParser())
 
-  // Creates a http server ready to listen.
-  const server = http.createServer(app.callback())
+        // Load routes (API "controllers")
+        .use(Controllers.items.routes())
+        // Register authentication
+        .use(auth)
+        .use(Controllers.users.routes())
+        // Default handler when nothing stopped the chain.
+        .use(notFoundHandler)
 
-  // instantiate a connection to our db
-  try {
-    await Mongoose.connect(`${env.DB_URL}`)
-    logger.debug('Database connected')
-    // Add a `close` event listener so we can clean up resources.
-    server.on('close', () => {
-      // Tear down db connection
-      Mongoose.disconnect()
-      logger.debug('Disconnect database')
-      logger.debug('Server closing, bye!')
+    // Creates a http server ready to listen.
+    const server = http.createServer(app.callback())
+
+    // instantiate a connection to our db
+    try {
+        await Mongoose.connect(`${env.DB_URL}`)
+        logger.debug('Database connected')
+        // Add a `close` event listener so we can clean up resources.
+        server.on('close', () => {
+            // Tear down db connection
+            Mongoose.disconnect()
+            logger.debug('Disconnect database')
+            logger.debug('Server closing, bye!')
+        })
+    } catch (error) {
+        console.error(error)
+    }
+    // throw a close event to server on process interruption
+    process.on('SIGINT', () => {
+        server.close()
     })
-  } catch (error) {
-    console.error(error)
-  }
-  // throw a close event to server on process interruption
-  process.on('SIGINT', () => {
-    server.close()
-  })
-  // throw a close event on nodemon restart ( for development )
-  process.once('SIGUSR2', async function() {
-    await server.close()
-    process.kill(process.pid, 'SIGUSR2')
-  })
-  logger.debug('Server created, ready to listen', { scope: 'startup' })
-  return server
+    // throw a close event on nodemon restart ( for development )
+    process.once('SIGUSR2', async function() {
+        await server.close()
+        process.kill(process.pid, 'SIGUSR2')
+    })
+    logger.debug('Server created, ready to listen', { scope: 'startup' })
+    return server
 }

@@ -1,9 +1,10 @@
 import mongoose, { Schema } from 'mongoose'
 
 const schema = new Schema({
-    name: { type: String, required: true },
+    title: { type: String, required: true },
     price: { type: Number, required: true },
-    image: String,
+    poster: String,
+    backdrop: String,
     stock: { Number, default: 0 }
 })
 

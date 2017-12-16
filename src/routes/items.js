@@ -2,7 +2,7 @@ import Router from 'koa-router'
 import { Item } from '../models'
 import _ from 'lodash'
 import { logger } from '../lib/logger'
-import { permissionCheck } from '../services'
+import { permissionCheck, auth } from '../services'
 
 const router = new Router()
 
@@ -11,7 +11,7 @@ router
         const allItems = await Item.find()
         ctx.body = allItems.map(el => el.toJSON())
     })
-    .post('/items', permissionCheck, async ctx => {
+    .post('/items', auth, permissionCheck, async ctx => {
         if (ctx.state.user.privilege !== 'admin') {
             ctx.status = 403
             ctx.body = 'Only admin can add new item'
@@ -25,7 +25,7 @@ router
             logger.error(error)
         }
     })
-    .patch('/items/:id', permissionCheck, async ctx => {
+    .patch('/items/:id', auth, permissionCheck, async ctx => {
         if (
             ctx.state.user.privilege !== 'admin' &&
             Object.keys(ctx.request.body).filter(key =>
@@ -57,7 +57,7 @@ router
             ctx.status = 500
         }
     })
-    .delete('/items/:id', permissionCheck, async ctx => {
+    .delete('/items/:id', auth, permissionCheck, async ctx => {
         if (ctx.state.user.privilege !== 'admin') {
             ctx.status = 403
             ctx.body = 'Only admin can delete items'

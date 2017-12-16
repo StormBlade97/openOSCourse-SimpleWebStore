@@ -10,8 +10,7 @@
     },
     "scripts": {
         "start": "node dist/bin/www.js",
-        "build":
-            "rimraf dist && cross-env NODE_ENV=production babel src -d dist -s",
+        "build": "rimraf dist && cross-env NODE_ENV=production babel src -d dist -s",
         "dev": "nodemon src/bin/www.js",
         "test": "cross-env NODE_ENV=test jest",
         "cover": "npm run test -- --coverage",
@@ -37,6 +36,7 @@
         "lodash": "^4.17.4",
         "mongoose": "^4.13.6",
         "node": "^9.2.0",
+        "node-fetch": "^1.7.3",
         "palin": "^2.2.0",
         "yenv": "^1.0.6"
     },
@@ -66,8 +66,14 @@
     },
     "eslintConfig": {
         "parser": "babel-eslint",
-        "plugins": ["jest"],
-        "extends": ["standard", "prettier", "plugin:jest/recommended"],
+        "plugins": [
+            "jest"
+        ],
+        "extends": [
+            "standard",
+            "prettier",
+            "plugin:jest/recommended"
+        ],
         "env": {
             "jest/globals": true
         }
@@ -79,7 +85,10 @@
         "tabWidth": 4
     },
     "lint-staged": {
-        "*.js": ["prettier --write", "git add"]
+        "*.js": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "nodemonConfig": {
         "execMap": {
@@ -88,9 +97,13 @@
     },
     "jest": {
         "mapCoverage": true,
-        "testMatch": ["**/__tests__/**/*.test.js"],
+        "testMatch": [
+            "**/__tests__/**/*.test.js"
+        ],
         "testEnvironment": "node",
-        "collectCoverageFrom": ["src/**/*.js"],
+        "collectCoverageFrom": [
+            "src/**/*.js"
+        ],
         "coveragePathIgnorePatterns": [
             "/node_modules/",
             "__tests__",
@@ -100,7 +113,10 @@
     },
     "babel": {
         "sourceMaps": "both",
-        "plugins": ["transform-runtime", "transform-object-rest-spread"],
+        "plugins": [
+            "transform-runtime",
+            "transform-object-rest-spread"
+        ],
         "presets": [
             [
                 "env",
@@ -113,8 +129,12 @@
         ],
         "env": {
             "production": {
-                "plugins": ["source-map-support"],
-                "ignore": ["**/__tests__/**"]
+                "plugins": [
+                    "source-map-support"
+                ],
+                "ignore": [
+                    "**/__tests__/**"
+                ]
             }
         }
     }
