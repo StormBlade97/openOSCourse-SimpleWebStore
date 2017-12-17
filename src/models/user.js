@@ -20,7 +20,11 @@ const schema = new Schema({
             items: [{ item_id: SchemaTypes.ObjectId, quantity: Number }]
         }
     ],
-    avatar: String
+    avatar: String,
+    balance: {
+        type: Number,
+        default: 0
+    }
 })
 schema.set('toJSON', {
     transform: (doc, ret, options) => {

@@ -1,25 +1,25 @@
 import { observable, action, runInAction, autorun, computed } from 'mobx'
 
+const host =
+    process.env.NODE_ENV === 'development'
+        ? 'localhost:5000'
+        : window.location.host
+
 class Item {
     @observable id
     @observable title
     @observable poster
     @observable price
     @observable stock
+    @observable quantity
 
-    decreaseStock(amount) {
-        if (amount >= this.stock) {
-            let temp = this.stock
-            this.stock = 0
-            return temp
-        } else {
-            let temp = this.stock
-            this.stock -= amount
-            return temp - amount
-        }
-    }
-    increaseStock(amount) {
-        this.stock += amount
+    constructor(item) {
+        this.id = item.id
+        this.title = item.title
+        this.poster = item.poster
+        this.price = item.price
+        this.stock = item.stock
+        this.quantity = item.quantity
     }
 }
 
@@ -31,7 +31,8 @@ class Basket {
         this.originalMoney = originalMoney
     }
     @action.bound
-    add(item) {
+    add(i) {
+        const item = new Item(i)
         if (this.balance < item.price) return
         const index = this.items.findIndex(n => n.id == item.id)
         if (index == -1) {
@@ -50,6 +51,12 @@ class Basket {
     @computed
     get itemsCount() {
         return this.items.length
+    }
+    @computed
+    get totalCount() {
+        return this.items.reduce((acc, curr) => {
+            return (acc += curr.quantity)
+        }, 0)
     }
     @computed
     get totalCost() {
@@ -92,9 +99,8 @@ class UserStore {
     constructor(username, password) {
         this.username = username
         this.password = password
-        console.log(this.credentials)
         window
-            .fetch(`http://${process.env.REACT_APP_HOST}/login`, {
+            .fetch(`http://${host}/login`, {
                 method: 'post',
                 headers: {
                     Authorization: `Basic ${this.credentials}`
@@ -106,7 +112,7 @@ class UserStore {
                 this.password = rp.password
                 this.privilege = rp.privilege
                 this.loggedIn = true
-                this.cart = new Basket(0)
+                this.cart = new Basket(rp.balance)
             })
     }
 
@@ -127,40 +133,35 @@ class Store {
             persistedUser.password
         )
         window
-            .fetch(`http://${process.env.REACT_APP_HOST}/items/`)
+            .fetch(`http://${host}/items/`)
             .then(raw => raw.json())
-            .then(response => (this.items = response))
+            .then(response => (this.items = response.map(i => new Item(i))))
     }
 
     @action
     addMovie(item) {
         let foundIndex = this.items.findIndex(i => i.id === item.id)
         window
-            .fetch(
-                `http://${process.env.REACT_APP_HOST}/items/${
-                    foundIndex != -1 ? item.id : ''
-                }`,
-                {
-                    method: foundIndex != -1 ? 'PUT' : 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ['Authorization']: `Basic ${this.user.credentials}`
-                    },
-                    body: JSON.stringify(item)
-                }
-            )
+            .fetch(`http://${host}/items/${foundIndex != -1 ? item.id : ''}`, {
+                method: foundIndex != -1 ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ['Authorization']: `Basic ${this.user.credentials}`
+                },
+                body: JSON.stringify(item)
+            })
             .then(raw => raw.json())
             .then(
                 rp =>
                     foundIndex == -1
-                        ? this.items.push(rp)
+                        ? this.items.push(new Item(rp))
                         : this.items.splice(foundIndex, 1, rp)
             )
     }
     @action
     deleteMovie(item) {
         window
-            .fetch(`http://${process.env.REACT_APP_HOST}/items/${item.id}`, {
+            .fetch(`http://${host}/items/${item.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

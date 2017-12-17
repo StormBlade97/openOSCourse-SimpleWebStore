@@ -12,6 +12,8 @@ import { notFoundHandler } from '../middleware/not-found'
 import { errorHandler } from '../middleware/error-handler'
 import * as Controllers from '../routes/index'
 import { auth } from '../services'
+import serve from 'koa-static'
+import path from 'path'
 
 // config mongoose's promise
 Mongoose.Promise = global.Promise
@@ -40,6 +42,8 @@ export async function createServer() {
         .use(bodyParser())
 
         // Load routes (API "controllers")
+
+        .use(serve(path.join(__dirname, '../../build')))
         .use(Controllers.items.routes())
         .use(Controllers.login.routes())
         // Register authentication

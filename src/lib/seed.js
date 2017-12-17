@@ -48,9 +48,10 @@ const seed = async ({ numberOfCustomer, numberOfItem }) => {
                 .then(avatar => ({
                     username: `customer_${el}`,
                     password: `customer_password`,
-                    privilege: 'staff',
+                    privilege: 'customer',
                     transaction: null,
-                    avatar: avatar
+                    avatar: avatar,
+                    balance: chance.natural({ min: 1000, max: 2000 })
                 }))
         )
     )

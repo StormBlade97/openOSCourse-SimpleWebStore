@@ -61,6 +61,8 @@ class App extends Component {
                 />
             )
         const { privilege } = this.store.user
+
+        console.log(this.store.user.cart.balance)
         return (
             <div className="App">
                 <header className="App-header">
@@ -88,9 +90,11 @@ class App extends Component {
                                     onClick={() => (this.ui.drawerOpen = true)}
                                 >
                                     <Badge
-                                        badgeContent={
-                                            this.store.user.cart.itemsCount
-                                        }
+                                        badgeContent={this.store.user.cart.items.reduce(
+                                            (acc, curr) =>
+                                                (acc += curr.quantity),
+                                            0
+                                        )}
                                         color="primary"
                                     >
                                         <ShoppingCart />
