@@ -52,6 +52,8 @@ export async function createServer() {
         // Default handler when nothing stopped the chain.
         .use(notFoundHandler)
 
+    console.log(path.join(__dirname, '../../client-simple/build'))
+
     // Creates a http server ready to listen.
     const server = http.createServer(app.callback())
 
