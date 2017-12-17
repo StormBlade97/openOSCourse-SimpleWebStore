@@ -27,7 +27,7 @@ import Button from 'material-ui/Button'
                                     <TableCell numeric>Price</TableCell>
                                     <TableCell numeric>Quantity</TableCell>
                                     <TableCell>Poster</TableCell>
-                                    <TableCell>Func</TableCell>
+                                    <TableCell></TableCell>
                                     
                                 </TableRow>
                             </TableHead>

@@ -43,7 +43,7 @@ export async function createServer() {
 
         // Load routes (API "controllers")
 
-        .use(serve(path.join(__dirname, '../../build')))
+        .use(serve(path.join(__dirname, '../../client-simple/build')))
         .use(Controllers.items.routes())
         .use(Controllers.login.routes())
         // Register authentication

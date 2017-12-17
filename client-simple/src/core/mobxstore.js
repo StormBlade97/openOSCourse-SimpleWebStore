@@ -84,7 +84,7 @@ class Basket {
     }
     @action.bound
     checkout(cred) {
-        this.this.originalMoney = this.balance
+        this.originalMoney = this.balance
         this.items = []
     }
 }
@@ -99,6 +99,7 @@ class UserStore {
     constructor(username, password) {
         this.username = username
         this.password = password
+        console.log('initiate user store')
         window
             .fetch(`http://${host}/login`, {
                 method: 'post',
@@ -124,14 +125,22 @@ class UserStore {
 
 class Store {
     @observable items = []
-    @observable user = null
+    @observable user
 
     constructor() {
-        const persistedUser = JSON.parse(window.localStorage.getItem('user'))
-        this.user = new UserStore(
-            persistedUser.username,
-            persistedUser.password
-        )
+        console.log('initiate store')
+        try {
+            const persistedUser = JSON.parse(
+                window.localStorage.getItem('user')
+            )
+            this.user = new UserStore(
+                persistedUser.username,
+                persistedUser.password
+            )
+        } catch (error) {
+            console.log(error)
+        }
+
         window
             .fetch(`http://${host}/items/`)
             .then(raw => raw.json())
