@@ -37,9 +37,10 @@
         "koa-static": "^4.0.2",
         "lodash": "^4.17.4",
         "mongoose": "^4.13.6",
-        "node": "^9.2.0",
+        "node": "^8.0",
         "node-fetch": "^1.7.3",
         "palin": "^2.2.0",
+        "rimraf": "^2.6.2",
         "yenv": "^1.0.6"
     },
     "devDependencies": {
@@ -63,7 +64,6 @@
         "lint-staged": "^5.0.0",
         "nodemon": "^1.12.1",
         "prettier": "^1.7.4",
-        "rimraf": "^2.6.2",
         "smid": "^0.1.1"
     },
     "eslintConfig": {
