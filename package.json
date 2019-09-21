@@ -23,7 +23,7 @@
         "@koa/cors": "^2.2.1",
         "awilix": "^2.12.0",
         "awilix-koa": "^1.0.3",
-        "axios": "^0.17.1",
+        "axios": "^0.18.1",
         "basic-auth": "^2.0.0",
         "bristol": "^0.3.3",
         "chance": "^1.0.12",
