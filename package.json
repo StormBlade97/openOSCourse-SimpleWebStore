@@ -38,7 +38,7 @@
         "lodash": "^4.17.4",
         "mongoose": "^4.13.6",
         "node": "^8.0",
-        "node-fetch": "^1.7.3",
+        "node-fetch": "^2.6.1",
         "palin": "^2.2.0",
         "rimraf": "^2.6.2",
         "cross-env": "^5.1.1",
